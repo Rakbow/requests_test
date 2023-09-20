@@ -4,7 +4,8 @@ import time
 import requests  # 导库
 from bs4 import BeautifulSoup
 
-from requests_tool import get_random_date_str, open_text
+from requests_tool import get_random_date_str
+from file_tools import open_text, write_list_to_file
 
 common_property_list = [
     '简体中文名: ',
@@ -91,13 +92,23 @@ def get_person_html_text(start, end):
     base_url = 'https://bangumi.tv/person/{}'
     file_name = 'person_{}.txt'
     save_html_path = './html'
+    error_file_no_list = []
     for i in range(start, end):
-        url = base_url.format(i)
-        html_text = get_html_text(url)
-        with open(f'{save_html_path}/' + file_name.format(i), 'w+', encoding='utf-8') as file:
-            file.write(html_text)
-        time.sleep(random.randint(1, 4))
-        print('========={}/{}========='.format(i, end))
+        try:
+            # 尝试进行操作，可能会抛出异常
+            url = base_url.format(i)
+            html_text = get_html_text(url)
+            with open(f'{save_html_path}/' + file_name.format(i), 'w+', encoding='utf-8') as file:
+                file.write(html_text)
+            time.sleep(random.randint(1, 4))
+            print('========={}/{}========='.format(i, end))
+        except ValueError:
+            # 如果遇到异常（这里是值错误），捕获并输出消息
+            print('========={}获取失败========='.format(i))
+            error_file_no_list.append(i)
+            continue
+
+    write_list_to_file(error_file_no_list, save_html_path + '')
 
 
 

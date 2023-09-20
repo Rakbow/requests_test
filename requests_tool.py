@@ -19,21 +19,3 @@ def get_random_date_str():
     time_string = random_time.strftime('%a, %d %b %Y %H:%M:%S GMT')
     return time_string
 
-
-def open_text(i):
-    # 指定目录
-    dir_path = './html'
-    # 指定文件名和扩展名
-    file_name = 'person_{}.txt'.format(i)
-    print(file_name)
-    file_content = ''
-
-    # 遍历目录下所有文件名
-    for filename in os.listdir(dir_path):
-        # 判断是否是指定文件名和扩展名的文件
-        if filename.startswith(file_name):
-            # 打开文件并读取内容
-            with open(os.path.join(dir_path, filename), 'r', encoding='utf-8') as f:
-                file_content = f.read()
-
-    return file_content
